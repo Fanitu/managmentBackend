@@ -18,7 +18,7 @@ app.use((req,res,next)=>{
 })
 
 app.use(cors({
-  origin:'https://basic-managment.vercel.app/',
+  origin:'https://basic-managment.vercel.app',
   methods:['GET','POST','PUT','DELETE'],
   credential:true
 }));
