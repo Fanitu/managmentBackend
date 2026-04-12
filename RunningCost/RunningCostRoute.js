@@ -1,10 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { createNewRunningCost,getAllRunningCost } = require('./RunningCostController')
+const { createNewRunningCost,getAllRunningCost,getRunningCostsByDateRange,getDailyRunningCostSummaries,getWeeklyRunningCostSummaries,getMonthlyRunningCostSummaries} = require('./RunningCostController')
 
-router.route('/')
-.post(createNewRunningCost)
-.get(getAllRunningCost);
+router.post('/',createNewRunningCost)
+router.get('/',getAllRunningCost);
+
+router.get('/date-range', getRunningCostsByDateRange);
+router.get('/daily-summaries', getDailyRunningCostSummaries);
+router.get('/weekly-summaries', getWeeklyRunningCostSummaries);
+router.get('/monthly-summaries', getMonthlyRunningCostSummaries);
 
 
 
