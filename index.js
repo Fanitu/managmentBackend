@@ -19,7 +19,7 @@ app.use((req,res,next)=>{
 })
 
 app.use(cors({
-  origin:'http://localhost:5173',
+  origin:'https://basic-managment.vercel.app',
   methods:['GET','POST','PUT','DELETE'],
   credentials:true
 }));
@@ -30,14 +30,9 @@ app.use((req,res,next)=>{
 })
 
 
-app.use('/api/combined', combinedSummaryRoute);
 app.use('/api/order', orderRoutes);
 app.use('/api/running-costs', RunningCostRoutes);
-
-app.use((req,res,next)=>{
-  console.log('backend 3 accesed!')
-  next();
-})
+app.use('/api/combined', combinedSummaryRoute);
 const PORT = 5000;
 
 app.listen(PORT, () => {
