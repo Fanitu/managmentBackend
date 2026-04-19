@@ -36,7 +36,13 @@ const actualPriceForm = {
     Egg_Sandwich:40,
 
     Normal_Ful:87,
-    Special_Ful:107
+    Special_Ful:107,
+
+    One_dabo:9,
+    Two_dabo:18,
+    Three_dabo:27,
+    Four_dabo:36
+    
     
   }
 
