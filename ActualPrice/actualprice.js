@@ -35,6 +35,10 @@ const actualPriceForm = {
     Special_Toast:95,
     Egg_Sandwich:40,
 
+    One_litre:34,
+    Two_litre:42,
+    Half_litre:21,
+
     Normal_Ful:87,
     Special_Ful:107,
 
