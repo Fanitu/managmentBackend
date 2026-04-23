@@ -142,38 +142,12 @@ exports.getWeeklySummaries = async (req, res) => {
         const orders = await Orders.aggregate([
             {
                 $addFields: {
-                    // Get day of week (1=Sunday, 2=Monday, ..., 7=Saturday)
-                    dayOfWeek: { $dayOfWeek: "$createdAt" },
-                    // Calculate days to subtract to get to Monday
-                    daysToMonday: {
-                        $cond: [
-                            { $eq: [{ $dayOfWeek: "$createdAt" }, 1] }, // If Sunday
-                            6, // Go back 6 days to previous Monday
-                            { $subtract: [{ $dayOfWeek: "$createdAt" }, 2] } // Otherwise go back to Monday
-                        ]
-                    }
-                }
-            },
-            {
-                $addFields: {
-                    // Calculate Monday of that week
-                    weekStartMonday: {
-                        $dateSubtract: {
-                            startDate: "$createdAt",
-                            unit: "day",
-                            amount: "$daysToMonday"
-                        }
-                    }
-                }
-            },
-            {
-                $addFields: {
-                    // Normalize to start of the day (midnight)
                     weekStart: {
-                        $dateFromParts: {
-                            year: { $year: "$weekStartMonday" },
-                            month: { $month: "$weekStartMonday" },
-                            day: { $dayOfMonth: "$weekStartMonday" }
+                        $dateTrunc: {
+                            date: "$createdAt",
+                            unit: "week",
+                            binSize: 1,
+                            startOfWeek: "Mon"
                         }
                     }
                 }
@@ -187,6 +161,12 @@ exports.getWeeklySummaries = async (req, res) => {
                     totalMakingCost: { $sum: "$ordersMakingPrice" },
                     totalProfit: { $sum: "$profite" },
                     orderCount: { $sum: 1 }
+                }
+            },
+            {
+                $addFields: {
+                    year: { $year: "$_id" },
+                    week: { $isoWeek: "$_id" }
                 }
             },
             {
