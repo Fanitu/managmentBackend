@@ -141,11 +141,21 @@ exports.getWeeklySummaries = async (req, res) => {
     try {
         const orders = await Orders.aggregate([
             {
+                $addFields: {
+                    // Calculate week start (Monday) for each order
+                    weekStart: {
+                        $dateTrunc: {
+                            date: "$createdAt",
+                            unit: "week",
+                            binSize: 1,
+                            startOfWeek: "Mon"  // Week starts Monday
+                        }
+                    }
+                }
+            },
+            {
                 $group: {
-                    _id: {
-                        year: { $year: "$createdAt" },
-                        week: { $week: "$createdAt" }
-                    },
+                    _id: "$weekStart",
                     startDate: { $min: "$createdAt" },
                     endDate: { $max: "$createdAt" },
                     totalRevenue: { $sum: "$ordersPrice" },
@@ -155,10 +165,10 @@ exports.getWeeklySummaries = async (req, res) => {
                 }
             },
             {
-                $sort: { "_id.year": -1, "_id.week": -1 }
+                $sort: { "_id": -1 }
             }
         ]);
-        
+
         res.status(200).json({
             success: true,
             weeklySummaries: orders
