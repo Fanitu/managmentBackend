@@ -166,7 +166,15 @@ exports.getWeeklySummaries = async (req, res) => {
             {
                 $addFields: {
                     year: { $year: "$_id" },
-                    week: { $isoWeek: "$_id" }
+                    week: { $isoWeek: "$_id" },
+                    // Calculate Sunday (end of the week)
+                    weekEnd: {
+                        $dateAdd: {
+                            startDate: "$_id",
+                            unit: "day",
+                            amount: 6
+                        }
+                    }
                 }
             },
             {
@@ -186,7 +194,6 @@ exports.getWeeklySummaries = async (req, res) => {
         });
     }
 };
-
 // NEW: Get monthly summaries
 exports.getMonthlySummaries = async (req, res) => {
     try {
